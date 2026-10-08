@@ -1,0 +1,16 @@
+name: Browser based workflow
+
+on: [push]
+
+jobs:
+  my-first-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout code
+        uses: actions/checkout@v4
+      - name: say Hello
+        run: echo "i built this in the browser"
+
+      - name: show server time
+        run: date
+        
