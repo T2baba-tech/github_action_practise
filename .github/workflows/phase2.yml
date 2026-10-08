@@ -1,0 +1,43 @@
+name: Phase 2 Triggers and Contexts
+
+on:
+  # 1. Trigger on Push
+  push:
+    branches: [main] # Only run when pushing to the 'main' branch
+
+  # 2. Manual Trigger with Inputs
+  workflow_dispatch:
+    inputs:
+      logLevel:
+        description: 'Log level'
+        required: true
+        default: 'warning'
+        type: choice
+        options:
+        - info
+        - warning
+        - debug
+      tags:
+        description: 'Test scenario tags'
+        required: false
+        type: boolean
+
+jobs:
+  context-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Show GitHub Context Info
+        run: |
+          echo "Who triggered this? -> ${{ github.actor }}"
+          echo "What event happened? -> ${{ github.event_name }}"
+          echo "Which branch is this? -> ${{ github.ref }}"
+
+      - name: Handle Manual Inputs
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          echo "Manual log level selected: ${{ github.event.inputs.logLevel }}"
+          echo "Are tags enabled? ${{ github.event.inputs.tags }}"
+
+      - name: Special message for the owner
+        if: github.actor == 'your-github-username' # <-- CHANGE THIS to your username
+        run: echo "Hello Boss! Welcome back."
