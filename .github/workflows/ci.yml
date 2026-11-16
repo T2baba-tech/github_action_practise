@@ -80,6 +80,15 @@ jobs:
             echo "DEMO_TOKEN IS NOT CONFIGURED"
           fi
 
+      - name: Create a message
+        id: message
+        run: echo "text=Hello from previous steps!" >> $GITHUB_OUTPUT
+
+      - name: read the message
+        env:
+          MESSAGE: ${{ steps.message.outputs.text }}
+        run: echo "$MESSAGE"
+
       - name: run application
         run: python app.py  
 
