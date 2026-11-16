@@ -98,7 +98,7 @@ jobs:
         env:
           MESSAGE: ${{ needs.build-and-test.outputs.message }}
         run: |
-        echo "Received: $MESSAGE"
+          echo "Received: $MESSAGE"
 
       - name: Show this job's ID
         run: |
