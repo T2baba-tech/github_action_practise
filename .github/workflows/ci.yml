@@ -7,11 +7,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
   schedule:
-    - cron: '*/5 * * * *'
+    - cron: '17 9 * * 1'
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: check out repository code
@@ -22,8 +22,10 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: show python version
-        run: python --version
+      - name: show runner info
+        run: |
+          echo "Operating System: $RUNNER_OS"
+          uname -a
 
       - name: run application
         run: python app.py  
