@@ -62,6 +62,24 @@ jobs:
             echo "DEMO_TOKEN IS NOT CONFIGURED"
           fi
 
+      - name: inspect workflow context
+        env:
+          ACTION_EVENTS: ${{ toJSON(github.event) }}
+          ACTION_REF: ${{ github.ref }}
+          ACTION_APP_ENV: ${{ env.APP_ENV }}
+          ACTION_REPOSITORY: ${{ github.repository }}
+          DEMO_TOKEN: ${{ secrets.DEMO_TOKEN }}
+        run: |
+          echo "Event: $ACTION_EVENTS"
+          echo "Ref: $ACTION_REF"
+          echo "APP_ENV: $ACTION_APP_ENV"
+          echo "Repository: $ACTION_REPOSITORY"
+          if [ -n "$DEMO_TOKEN" ]; then
+            echo "DEMO_TOKEN IS CONFIGURED"
+          else
+            echo "DEMO_TOKEN IS NOT CONFIGURED"
+          fi
+
       - name: run application
         run: python app.py  
 
