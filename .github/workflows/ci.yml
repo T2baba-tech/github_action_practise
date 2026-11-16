@@ -52,6 +52,16 @@ jobs:
       - name: Show Python version
         run: python --version
 
+      - name: check demo secret availability
+        env:
+          DEMO_TOKEN: ${{ secrets.DEMO_TOKEN }}
+        run: |
+          if [ -n "$DEMO_TOKEN" ]; then
+            echo "DEMO_TOKEN IS CONFIGURED"
+          else
+            echo "DEMO_TOKEN IS NOT CONFIGURED"
+          fi
+
       - name: run application
         run: python app.py  
 
