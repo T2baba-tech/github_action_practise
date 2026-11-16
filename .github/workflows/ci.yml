@@ -12,7 +12,14 @@ on:
 jobs:
   runner-info:
     runs-on: ubuntu-24.04
+    needs: build-and-test
     steps:
+
+      - name: Receive message from build-and-test
+        env:
+          MESSAGE: ${{ needs.build-and-test.outputs.message }}
+        run: echo "Received: $MESSAGE"  
+
       - name: Show this job's ID
         run: |
           echo "Current job: $GITHUB_JOB"
@@ -23,6 +30,8 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-24.04
+    outputs:
+      messsage: ${{ steps.message.outputs.text }}
     env:
       APP_ENV: ci
 
