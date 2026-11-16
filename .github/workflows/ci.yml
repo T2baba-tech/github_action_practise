@@ -10,35 +10,17 @@ on:
     - cron: '17 9 * * 1'
 
 jobs:
-  runner-info:
-    runs-on: ubuntu-24.04
-    needs: build-and-test
-    steps:
-
-      - name: Receive message from build-and-test
-        env:
-          MESSAGE: ${{ needs.build-and-test.outputs.message }}
-        run: echo "Received: $MESSAGE"  
-
-      - name: Show this job's ID
-        run: |
-          echo "Current job: $GITHUB_JOB"
-
-      - name: Show operating system
-        run: |
-          echo "operating system: $RUNNER_OS"
-
   build-and-test:
     runs-on: ubuntu-24.04
     outputs:
-      messsage: ${{ steps.message.outputs.text }}
+      message: ${{ steps.message.outputs.text }}
     env:
       APP_ENV: ci
 
     steps:
       - name: check out repository code
         uses: actions/checkout@v4
-      
+
       - name: inspect checkout repository
         run: |
           echo "working directory: $PWD"
@@ -53,7 +35,7 @@ jobs:
         run: |
           echo "Operating System: $RUNNER_OS"
           uname -a
-      
+
       - name: show app environment
         run: |
           echo "APP_ENV: $APP_ENV"
@@ -91,7 +73,7 @@ jobs:
 
       - name: Create a message
         id: message
-        run: echo "text=Hello from previous steps!" >> $GITHUB_OUTPUT
+        run: echo "text=Hello from previous steps!" >> "$GITHUB_OUTPUT"
 
       - name: read the message
         env:
@@ -99,11 +81,29 @@ jobs:
         run: echo "$MESSAGE"
 
       - name: run application
-        run: python app.py  
+        run: python app.py
 
       - name: run automated tests
         env:
           APP_ENV: test
         run: |
           echo "APP_ENV=$APP_ENV"
-          python -m unittest discover 
+          python -m unittest discover
+
+  runner-info:
+    runs-on: ubuntu-24.04
+    needs: build-and-test
+    steps:
+      - name: Receive message from build-and-test
+        env:
+          MESSAGE: ${{ needs.build-and-test.outputs.message }}
+        run: |
+        echo "Received: $MESSAGE"
+
+      - name: Show this job's ID
+        run: |
+          echo "Current job: $GITHUB_JOB"
+
+      - name: Show operating system
+        run: |
+          echo "operating system: $RUNNER_OS"
