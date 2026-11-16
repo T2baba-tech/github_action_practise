@@ -27,6 +27,11 @@ jobs:
     steps:
       - name: check out repository code
         uses: actions/checkout@v4
+      
+      - name: inspect checkout repository
+        run: |
+          echo "working directory: $PWD"
+          ls -alh
 
       - name: set up python
         uses: actions/setup-python@v5
@@ -37,6 +42,9 @@ jobs:
         run: |
           echo "Operating System: $RUNNER_OS"
           uname -a
+      
+      - name: Show Python version
+        run: python --version
 
       - name: run application
         run: python app.py  
