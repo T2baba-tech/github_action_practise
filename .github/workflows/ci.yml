@@ -23,6 +23,8 @@ jobs:
 
   build-and-test:
     runs-on: ubuntu-24.04
+    env:
+      APP_ENV: ci
 
     steps:
       - name: check out repository code
@@ -43,6 +45,10 @@ jobs:
           echo "Operating System: $RUNNER_OS"
           uname -a
       
+      - name: show app environment
+        run: |
+          echo "APP_ENV: $APP_ENV"
+
       - name: Show Python version
         run: python --version
 
@@ -50,4 +56,8 @@ jobs:
         run: python app.py  
 
       - name: run automated tests
-        run: python -m unittest discover
+        env:
+          APP_ENV: test
+        run: |
+          echo "APP_ENV=$APP_ENV"
+          python -m unittest discover 
