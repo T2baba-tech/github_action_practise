@@ -14,9 +14,11 @@ jobs:
     runs-on: ubuntu-24.04
     steps:
       - name: Show this job's ID
-        run: echo "Current job: $GITHUB_JOB"
+        run: |
+        echo "Current job: $GITHUB_JOB"
       - name: Show operating system
-        run: echo "operating system: $RUNNER_OS"
+        run: |
+          echo "operating system: $RUNNER_OS"
 
   build-and-test:
     runs-on: ubuntu-24.04
