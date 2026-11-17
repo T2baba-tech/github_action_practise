@@ -102,6 +102,22 @@ jobs:
           echo "APP_ENV=$APP_ENV"
           python -m unittest discover
 
+      - name: create ai summary
+        run: |
+          {
+            echo "commit: ${{github.sha}}"
+            echo "python version: $(python --version)"
+            echo "Run number: $GITHUB_RUN_NUMBER"
+          } > ci-summary.txt
+
+      - name: upload ci summary artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ci-summary
+          path: ci-summary.txt
+          if-no-files-found: error
+          retention-days: 7
+
   runner-info:
     runs-on: ubuntu-24.04
     needs: build-and-test
@@ -119,3 +135,12 @@ jobs:
       - name: Show operating system
         run: |
           echo "operating system: $RUNNER_OS"
+
+      - name: Download ci summary artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: ci-summary
+
+      - name: Display ci summary
+        run: |
+          cat ci-summary.txt
